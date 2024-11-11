@@ -48,7 +48,7 @@ jobs:
                   const title = post.title[0];
                   const link = post.link[0];
                   const content = \`# \${title}\n\n\${link}\`;
-                  const filePath = \`velog-posts/\${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.md\`;
+                  const filePath = `velog-posts/${title.replace(/[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]/g, '_').toLowerCase()}.md`;
                   
                   fs.writeFileSync(filePath, content);
                 });
