@@ -2,8 +2,8 @@ name: Velog Backup
 
 on:
   schedule:
-    - cron: '0 0 * * *' # 매일 자정에 실행 (원하는 시간대로 수정 가능)
-  workflow_dispatch: # 수동 실행
+    - cron: '0 0 * * *'  # 매일 자정에 실행 (원하는 시간대로 수정 가능)
+  workflow_dispatch:  # 수동 실행
 
 jobs:
   backup:
@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install axios
+          npm install axios xml2js  # xml2js 라이브러리 설치
 
       - name: Fetch and backup Velog posts
         env:
@@ -30,17 +30,33 @@ jobs:
           node -e "
           const fs = require('fs');
           const axios = require('axios');
+          const xml2js = require('xml2js');  // xml2js 로드
           
           const username = process.env.VELOG_USERNAME;
-          axios.get(`https://velog.io/api/@${username}/posts`)
+          const url = `https://api.velog.io/rss/@${username}`;
+
+          axios.get(url)
             .then(response => {
-              response.data.forEach(post => {
-                const content = \`# \${post.title}\n\n\${post.body}\`;
-                const filePath = \`velog-posts/\${post.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.md\`;
-                fs.writeFileSync(filePath, content);
+              xml2js.parseString(response.data, (err, result) => {
+                if (err) {
+                  console.error('Error parsing RSS:', err);
+                  return;
+                }
+                
+                const posts = result.rss.channel[0].item;  // RSS 아이템 목록
+                posts.forEach(post => {
+                  const title = post.title[0];
+                  const link = post.link[0];
+                  const content = \`# \${title}\n\n\${link}\`;
+                  const filePath = \`velog-posts/\${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.md\`;
+                  
+                  fs.writeFileSync(filePath, content);
+                });
               });
             })
-            .catch(err => console.error('Error fetching Velog posts:', err));
+            .catch(err => {
+              console.error('Error fetching Velog posts:', err);
+            });
           "
 
       - name: Commit and push changes
