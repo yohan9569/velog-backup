@@ -48,9 +48,18 @@ jobs:
                   const title = post.title[0];
                   const link = post.link[0];
                   const content = \`# \${title}\n\n\${link}\`;
-                  const filePath = `velog-posts/${title.replace(/[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]/g, '_').toLowerCase()}.md`;
+                  let fileName = title.replace(/[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]/g, '_'); // 유효하지 않은 문자는 '_'로 대체
+                  fileName = fileName.replace('/', '-').replace('\\', '-'); // 슬래시와 백슬래시를 대시로 대체
+                  fileName = fileName.toLowerCase(); // 소문자화
+                  const filePath = path.join('velog-posts', `${fileName}.md`);
                   
-                  fs.writeFileSync(filePath, content);
+                  // 파일이 존재하지 않으면 생성
+                  if (!fs.existsSync(filePath)) {
+                      fs.writeFileSync(filePath, entry.description, 'utf8');
+                      console.log(`Created new file: ${filePath}`);
+                  } else {
+                      console.log(`File already exists: ${filePath}`);
+                  }
                 });
               });
             })
