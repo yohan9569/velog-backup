@@ -53,7 +53,7 @@ jobs:
                   
                   // 파일이 존재하지 않으면 생성
                   if (!fs.existsSync(filePath)) {
-                      fs.writeFileSync(filePath, entry.description, 'utf8');
+                      fs.writeFileSync(filePath, post.description, 'utf8');
                       console.log(`Created new file: ${filePath}`);
                   } else {
                       console.log(`File already exists: ${filePath}`);
