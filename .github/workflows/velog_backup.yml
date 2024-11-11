@@ -33,7 +33,7 @@ jobs:
           const xml2js = require('xml2js');  // xml2js 로드
           
           const username = "yohan9569";
-          const url = "https://api.velog.io/rss/@yohan9569";
+          const url = 'https://api.velog.io/rss/@' + username;
 
           axios.get(url)
             .then(response => {
