@@ -51,7 +51,7 @@ jobs:
                   let fileName = title.replace(/[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]/g, '_');
                   fileName = fileName.replace(/[\/\\\\]/g, '-');  // 슬래시와 백슬래시를 대시로 대체
                   fileName = fileName.toLowerCase(); // 소문자화
-                  const filePath = path.join('velog-posts', `${fileName}.md`);
+                  const filePath = 'velog-posts/' + fileName + '.md';
                   
                   // 파일이 존재하지 않으면 생성
                   if (!fs.existsSync(filePath)) {
