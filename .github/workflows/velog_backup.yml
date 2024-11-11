@@ -49,8 +49,7 @@ jobs:
                   const link = post.link[0];
                   const content = \`# \${title}\n\n\${link}\`;
                   let fileName = title.replace(/[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]/g, '_');
-                  fileName = fileName.replace('/', '-');  // 슬래시를 대시로 대체
-                  fileName = fileName.replace('\\', '-'); // 백슬래시를 대시로 대체
+                  fileName = fileName.replace(/[\/\\]/g, '-');  // 슬래시와 백슬래시를 대시로 대체
                   fileName = fileName.toLowerCase(); // 소문자화
                   const filePath = path.join('velog-posts', `${fileName}.md`);
                   
