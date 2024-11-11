@@ -61,11 +61,11 @@ jobs:
 
       - name: Commit and push changes
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git config --local user.email "yohan9569@gmail.com"
           git config --local user.name "yohan9569"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/yohan9569/velog-backup.git  # GITHUB_TOKEN으로 인증
+          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/yohan9569/velog-backup.git
           git add velog-posts/*.md
           git commit -m "Auto backup Velog posts"
           git push
