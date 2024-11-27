@@ -73,6 +73,12 @@ jobs:
           git config --local user.email "yohan9569@gmail.com"
           git config --local user.name "yohan9569"
           git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/yohan9569/velog-backup.git
-          git add velog-posts/*.md
-          git commit -m "Auto backup Velog posts"
-          git push
+
+          # 변경 사항이 있는 경우에만 커밋 및 푸시 실행
+          if [ -n "$(git status --porcelain)" ]; then
+            git add velog-posts/*.md
+            git commit -m "Auto backup Velog posts"
+            git push
+          else
+            echo "No changes to commit"
+          fi
